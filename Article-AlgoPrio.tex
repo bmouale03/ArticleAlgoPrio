@@ -29,20 +29,20 @@
 \geometry{a4paper, margin=1in} 
 
 \begin{document} 
-\title{Optimisation des Flux dans un Entrepôt Intégrant un Algorithme d'Apprentissage par Renforcement}
+\title{Optimisation des flux dans un entrepôt intégrant un algorithme d'apprentissage par renforcement}
 
 \author{
     Dr. Bienvenue N.M. MOUALE\thanks\ \ ,
     Université Nangui Abrogoua,
     \texttt{bmouale@mail.ru}
     \and
-    Jean Martin,
+    Dr. Mamadou SORO,
     Université Nangui Abrogoua ,
-    \texttt{jean.martin@polytechnique.edu}
+    %\texttt{jean.martin@polytechnique.edu}
    \and
-    Jean Martin,
+    Dr. Joseph Wilfried EHOUNOU,
     Université Nangui Abrogoua ,
-    \texttt{jean.martin@polytechnique.edu}
+    %\texttt{jean.martin@polytechnique.edu}
 }
  
 \date{Juillet, 2025}
@@ -72,6 +72,8 @@ Les objectifs spécifiques sont les suivants :
 L'optimisation des flux dans les entrepôts représente un enjeu stratégique pour améliorer l'efficacité logistique. Les recherches dans ce domaine ont porté sur la préparation de commandes, le stockage dynamique ou encore la gestion du trafic robotisé, en mobilisant des approches traditionnelles (programmation linéaire, heuristiques) mais aussi des techniques d'intelligence artificielle, notamment l'apprentissage par renforcement (RL).
 
 Des travaux comme ceux de \textbf{Cals et al. [3]} ont appliqué le \textbf{Q-Learning} et les \textbf{Deep Q-Networks (DQN)} pour optimiser les itinéraires de picking dans des entrepôts automatisés. \textbf{Dunn et al. [4]} ont exploré les systèmes de picking basés sur le RL dans des environnements de type Robotic Mobile Fulfillment System. Par ailleurs, \textbf{Krnjaic et al. [6]} ont étudié le \textbf{multi-agent reinforcement learning (MARL)} pour coordonner plusieurs robots en environnement partagé, et \textbf{Zhou et al. [7]} ont introduit un modèle de récompense segmentée pour optimiser la navigation robotique en entrepôt. Des simulations réalistes via \textbf{OpenAI Gym}, \textbf{FlexSim} ou \textbf{RWARE} (AltenBern, 2023) sont également utilisées pour entraîner les agents dans des contextes proches du réel.
+
+L’intégration de l’intelligence artificielle, et en particulier des réseaux de neurones, dans les systèmes de reconnaissance et de classification a démontré une capacité croissante à résoudre des problèmes complexes dans des environnements dynamiques. À ce titre, des travaux récents tels que ceux de Mouale et al. (2021) montrent l'efficacité des méthodes neuronales pour le traitement et la reconnaissance d’images dans des contextes à forte variabilité \textbf{Mouale et al. [10]}. Cette approche rejoint les principes du Q-learning, où l'apprentissage par renforcement permet à un agent d'adapter progressivement son comportement par l’expérience, tout comme les réseaux de neurones ajustent leurs poids à partir de données. Ainsi, dans des environnements incertains ou évolutifs, le Q-learning, à l’instar des réseaux neuronaux, se distingue par sa capacité d’adaptation, contrairement à des algorithmes déterministes comme Dijkstra, qui nécessitent une connaissance complète du système.
 
 Cependant, ces recherches souffrent de plusieurs limitations : difficulté de généralisation à des entrepôts dynamiques [9] modélisations statiques, coût computationnel élevé des modèles de RL profonds, ou encore manque de validation sur des systèmes physiques. De plus, les fonctions de récompense utilisées restent souvent trop simplistes, sans intégrer des paramètres opérationnels complexes tels que la priorité des commandes ou la congestion [5].
 
@@ -114,16 +116,27 @@ Les 12 emplacements que nous avons définis sont au préalable tous reliés à u
         Niveau de priorité & Emplacement \\
         \hline
         1 & G \\
+	\hline
         2 & K \\
+	\hline
         3 & L \\
+	\hline
         4 & J \\
+	\hline
         5 & A \\
+	\hline
         6 & I \\
+	\hline
         7 & H \\
+	\hline
         8 & C \\
+	\hline
         9 & B \\
+	\hline
         10 & D \\
+	\hline
         11 & F \\
+	\hline
         12 & E \\
         \hline
     \end{tabular}
@@ -152,16 +165,27 @@ L'état d'entrée est simplement l'emplacement où se trouve notre Robot d'Entre
         Emplacement & État \\
         \hline
         A & 0 \\
+	\hline
         B & 1 \\
+	\hline
         C & 2 \\
+	\hline
         D & 3 \\
+	\hline
         E & 4 \\
+	\hline
         F & 5 \\
+	\hline
         G & 6 \\
+	\hline
         H & 7 \\
+	\hline
         I & 8 \\
+	\hline
         J & 9 \\
+	\hline
         K & 10 \\
+	\hline
         L & 11 \\
         \hline
     \end{tabular}
@@ -191,16 +215,27 @@ A a l'index 0 (1ere ligne de la matrice) et l'emplacement B a l'index 1 (2e colo
         & A & B & C & D & E & F & G & H & I & J & K & L \\
         \hline
         A & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+	\hline
         B & 1 & 0 & 1 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 \\
+	\hline
         C & 0 & 1 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 \\
+	\hline
         D & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 \\
+	\hline
         E & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 \\
+	\hline
         F & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 \\
+	\hline
         G & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 \\
+	\hline
         H & 0 & 0 & 0 & 1 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 1 \\
+	\hline
         I & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 1 & 0 & 0 \\
+	\hline
         J & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 1 & 0 & 0 & 1 & 0 \\
+	\hline
         K & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 1 \\
+	\hline
         L & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 1 & 0 \\
         \hline
     \end{tabular}
@@ -215,16 +250,27 @@ Nous venons de définir les récompenses en créant cette matrice de récompense
         & A & B & C & D & E & F & G & H & I & J & K & L \\
         \hline
         A & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+	\hline
         B & 1 & 0 & 1 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 \\
+	\hline
         C & 0 & 10 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 \\
+	\hline
         D & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 \\
+	\hline
         E & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 \\
+	\hline
         F & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 \\
+	\hline
         G & 0 & 0 & 1 & 0 & 0 & 0 & \textbf{M} & 1 & 0 & 0 & 0 & 0 \\
+	\hline
         H & 0 & 0 & 0 & 1 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 1 \\
+	\hline
         I & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 1 & 0 & 0 \\
+	\hline
         J & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 1 & 0 & 0 & 1 & 0 \\
+	\hline
         K & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 1 \\
+	\hline
         L & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 1 & 0 \\
         \hline
     \end{tabular}
@@ -410,62 +456,62 @@ Maintenant que nous avons notre matrice, nous pouvons donc passer à la mise en 
 6. Nous répétons les 5 étapes précédentes à partir de notre nouveau point de départ I jusqu'à ce que nous atteignions notre destination finale, le point $G$.\\
 
 
-Bien, nous avons une première version du modèle pratique, nous avons proposer une version  l'améliorer de deux façons :\\
+Bien que, nous ayons une  version du modèle pratique, nous avons proposer une autre version  améliorée de deux façons :\\
 •	Tout d'abord, en automatisant l'attribution de récompense à l'emplacement prioritaire afin que nous n'ayons pas à le faire manuellement. \\
 •	Deuxièmement, en ajoutant une fonction (qui inclut l'algorithme complet du Q-Learning (y compris l'étape d'initialisation) qui nous donne la possibilité de passer
 par un emplacement intermédiaire avant d'aller à l'emplacement prioritaire. Cet emplacement intermédiaire devrait bien sûr figurer parmi les 3 premiers emplacements prioritaires. Dans notre classement des emplacements prioritaires, le deuxième est $K$. \\
 Par conséquent, afin d'optimiser encore plus les flux de stockage, notre robot autonome doit passer par l'emplacement K pour récupérer les produits en route vers l'emplacement
 prioritaire $G$. Pour ce faire, il est possible de passer par tout emplacement intermédiaire dans le cadre de notre fonction "route()". Et c'est exactement ce que nous avons mis en place comme deuxième amélioration.\\
 Ainsi, notre modèle  nous affichera les résultats graphiques  suivants :
-\begin{figure}[h]
+
+\begin{figure}[htbp]
+  \centering
+  \begin{minipage}[b]{0.45\textwidth}
     \centering
-    \includegraphics[width=0.3\textwidth]{image5.png} 
+    \includegraphics[width=\textwidth]{routedirect.png}
     \caption{Automatisation de l'attribution de récompense à l'emplacement prioritaire}
-    \label{fig:Automatisation de l'attribution de récompense à l'emplacement prioritaire}
-\end{figure}
-
-\begin{figure}[htbp]
-  \centering
-  \begin{minipage}[b]{0.45\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{image5.png}
-    \caption{Automatisation de l'attribution de récompense avec emplacement intermédiaire}
-    \label{fig:Automatisation de l'attribution de récompense avec emplacement intermédiaire}
+    \label{fig:Automatisation de l'attribution de récompense  à l'emplacement prioritaire}
   \end{minipage}
   \hfill
   \begin{minipage}[b]{0.45\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{image5.png}
+    \includegraphics[width=\textwidth]{routeIntermediaire.png}
     \caption{Automatisation de l'attribution de récompense avec emplacement intermédiaire}
     \label{fig:Automatisation de l'attribution de récompense avec emplacement intermédiaire}
   \end{minipage}
 \end{figure}
 
 
-\begin{figure}[htbp]
-  \centering
-  \begin{minipage}[b]{0.45\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{image6.png}
-    \caption{Image 1}
-    \label{fig:image1}
-  \end{minipage}
-  \hfill
-  \begin{minipage}[b]{0.45\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{image6.png}
-    \caption{Image 2}
-    \label{fig:image2}
-  \end{minipage}
-\end{figure}
-
-
-\section{Comparaison des performances avec l'algorithme de Dijkstra}
+\section{Approfondissement analytique : Comparaison des performances entre Prio basé sur le Q-learning avec l'algorithme de Dijkstra}
+Dans cette section, nous proposons une analyse comparative approfondie entre l'algorithme  entre Prio basé sur le Q-learning, issu de l'apprentissage par renforcement, et l'algorithme de Dijkstra, classique en théorie des graphes. Les deux ont été appliqués à un problème de navigation dans un entrepôt simulé, via une application Streamlit dédiée.
 \subsection{Étude de cas 1 : Trajet sans étape intermédiaire}
 \begin{itemize}
     \item Départ : D
     \item Arrivée : A
 \end{itemize}
+
+\begin{itemize}
+    \item Départ : E
+    \item Arrivée : L
+\end{itemize}
+
+\begin{figure}[htbp]
+  \centering
+  \begin{minipage}[b]{0.45\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{image6.png}
+  \caption{Performance des algorithmes de D à A sans étape intermédiaire}
+    \label{fig:Performance  des algorithmes de D à A sans étape intermédiaire}
+  \end{minipage}
+  \hfill
+  \begin{minipage}[b]{0.45\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{image9.png}
+ \caption{Performance  des algorithmes de E à L sans étape intermédiaire}
+    \label{fig:Performance  des algorithmes de E à L sans étape intermédiaire}
+  \end{minipage}
+\end{figure}
+
 
 \begin{table}[H]
     \centering
@@ -473,17 +519,21 @@ Ainsi, notre modèle  nous affichera les résultats graphiques  suivants :
         \hline
         \textbf{Critère} & \textbf{Q-learning} & \textbf{Dijkstra} \\
         \hline
-        \textbf{Trajet} & D → H → G → C → B → A & D → H → G → C → B → A \\
+        \textbf{Trajet1} & D → H → G → C → B → A & D → H → G → C → B → A \\
        \hline
-        \textbf{Temps estimé} & 25 s & 25 s \\
+        \textbf{Trajet2} & E → I → J → K → L& E → I → J → K → L \\
+	\hline
+        \textbf{Temps estimé Trajet1 } & 25 s & 25 s \\
        \hline
+	\textbf{Temps estimé Trajet2 } & 20 s & 20 s \\
+   	 \hline
         \textbf{Optimalité} & Oui & Oui \\
         \hline
     \end{tabular}  \\ 
     \caption{Comparaison des algorithmes - Cas 1}
 \vspace{0.25cm} 
 \hspace{1cm} 
-\textbf{Observation :} Les deux algorithmes trouvent le même chemin optimal, ce qui montre que le Q-learning a bien appris la politique optimale pour ce graphe.
+\textbf{Observation :} Les deux algorithmes trouvent le même chemin optimal, ce qui montre que l'agorithme Prio basé sur le Q-learning a bien appris la politique optimale pour ce graphe.
 
 \end{table}
 
@@ -494,6 +544,29 @@ Ainsi, notre modèle  nous affichera les résultats graphiques  suivants :
     \item Arrivée : D
 \end{itemize}
 
+\begin{itemize}
+    \item Départ : C
+    \item Étape : K
+    \item Arrivée : B
+\end{itemize}
+
+\begin{figure}[htbp]
+  \centering
+  \begin{minipage}[b]{0.45\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{image8.png}
+  \caption{Performance des algorithmes de A à D  en passant par l'intermédiaire E}
+    \label{fig:Performance  des algorithmes de A à D  en passant par l'intermédiaire E}
+  \end{minipage}
+  \hfill
+  \begin{minipage}[b]{0.45\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{image10.png}
+ \caption{Performance  des algorithmes de C à B  en passant par l'intermédiaire K}
+    \label{fig:Performance  des algorithmes de C à B  en passant par l'intermédiaire K}
+  \end{minipage}
+\end{figure}
+
 \begin{table}[H]
     %\centering
 %\resizebox{\textwidth}{!}{%
@@ -501,17 +574,21 @@ Ainsi, notre modèle  nous affichera les résultats graphiques  suivants :
         \hline
         \textbf{Critère} & \textbf{Q-learning} & \textbf{Dijkstra} \\
         \hline
-        \textbf{Trajet} & A → B → F → J → I → E → I →J → K → L → H → D & A → B → F → J → I → E → I → J → K → L → H → D \\
+        \textbf{Trajet1} & A → B → F → J → I → E → I →J → K → L → H → D & A → B → F → J → I → E → I → J → K → L → H → D \\
         \hline
-        \textbf{Temps estimé} & 55 s & 55 s \\
+        \textbf{Trajet2} & C → B → F → J → K → J → F → B & C → B → F → J → K → J → F → B \\
+       \hline
+        \textbf{Temps estimé du Trajet1} & 55 s & 55 s \\
         \hline
+        \textbf{Temps estimé Trajet2} & 35 s & 35 s \\
+         \hline
         \textbf{Optimalité} & Oui (même que Dijkstra) & Oui \\
         \hline
     \end{tabularx} \\
   \caption{Comparaison des algorithmes - Cas 2}
 \vspace{0.25cm} 
 \hspace{1cm} 
-\textbf{Observation :} Encore une fois, les deux algorithmes aboutissent au même chemin, ce qui valide la robustesse du Q-learning même avec une contrainte supplémentaire.
+\textbf{Observation :} Encore une fois, les deux algorithmes aboutissent au même chemin, ce qui valide la robustesse de l'algorithme Prio basé sur le Q-learning même avec une contrainte supplémentaire.
   
 \end{table}
 
@@ -542,9 +619,10 @@ Ainsi, notre modèle  nous affichera les résultats graphiques  suivants :
 \end{table}
 
 
-
 \subsection{Conclusion  analytique}
 Les expérimentations montrent que l'algorithme basé sur le Q-learning peut atteindre un niveau de performance comparable à celui de Dijkstra en termes de chemin optimal et de temps estimé. Toutefois, leur philosophie diffère fondamentalement : Dijkstra est idéal pour des systèmes statiques et bien définis, tandis que l'algorithme basé sur le Q-learning est préférable pour des environnements dynamiques et incertains, grâce à sa capacité d'adaptation par apprentissage.
+
+\section*{Conclusion}
 
 \section*{Bibliographie}
 \begin{enumerate}
@@ -557,6 +635,8 @@ Les expérimentations montrent que l'algorithme basé sur le Q-learning peut att
     \item Zhou, Y., Ren, Y., \& Liu, H. (2021). \textit{Dual segmented reward model for warehouse robot navigation using reinforcement learning.} Applied Sciences, 12(9), 4703.
     \item Kim, S. J., \& Kang, K. H. (2024). \textit{Performance analysis of multi-agent reinforcement learning algorithms in warehouse environments.} Journal of KIISE, 51(3), 289-300.
     \item Islam, M. M., \& Park, J. H. (2023). \textit{Reinforcement Learning-Based Order Picking System in Warehouses Using FlexSim Simulation and Deep RL.} Algorithms, 16(9), 408.
+\item Mouale, M.N.B., \&  Kozyrev, D.V. (2021). \textit{Development of a neural network method in the problem of classification and image recognition. Sovremennye informacionnye tehnologii i IT-obrazovanie.} Modern Inf. Technol. IT-Educ.) 17(3), 507–518.
+
 \end{enumerate}
 
 \end{document}
